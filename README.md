@@ -1,7 +1,9 @@
+# Ticketsystem-Backend
+Managing authentication, tickets, and projects seamlessly.
 
-# Template Repository
+## Introduction
+This robust backend was crafted to address the needs of my p-seminar Event and Dance. Our goal was to create a streamlined and sophisticated solution for efficiently handling event invitations. This QR-Code based version establishes a direct link between the QR-Code ID and the corresponding guest name, with the added layer of data encryption.
 
-Template Repository for Node.js, TypeScript, Jest, and Express.
 
 ## Commands
 
