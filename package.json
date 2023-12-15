@@ -1,7 +1,7 @@
 {
-  "name": "ts-template",
-  "version": "1.0.0",
-  "description": "Template Repository",
+  "name": "p-seminar-ticketsystem-backend",
+  "version": "0.0.1",
+  "description": "Managing user auth, tickets, projects.",
   "main": "src/server.ts",
   "scripts": {
     "dev": "ts-node src/server.ts",
