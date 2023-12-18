@@ -1,6 +1,5 @@
 import { Request } from 'express';
 import { Document } from 'mongoose';
-import { Project } from './project.types';
 import { Types } from 'mongoose';
 
 export interface User extends Document {
@@ -23,8 +22,4 @@ export interface AuthRequest extends Request {
 
 export interface AuthUser extends Request {
     user?: UserTokenData;
-}
-
-export interface AuthUserWithAccess extends AuthUser {
-    projectsWithAccess?: Promise<Project[] | null> | Project[] | null;
 }
