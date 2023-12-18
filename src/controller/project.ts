@@ -1,4 +1,4 @@
-import { isValidObjectId } from 'mongoose';
+import { Types, isValidObjectId } from 'mongoose';
 import { Project, validateSchema } from '../models/project';
 import {
     Project as ProjectType,
@@ -95,10 +95,10 @@ class ProjectController {
 
     static async addAccessToProject(req: ProjectRequest, res: Response) {
         try {
-            if (!req.project.userWithAccess.includes(req.body.userId)) {
-                req.project.userWithAccess.push(req.body.userId);
+            const userId = new Types.ObjectId(req.params.userId);
+            if (!req.project.userWithAccess.includes(userId)) {
+                req.project.userWithAccess.push(userId);
             }
-
             await req.project.save();
             res.status(200).send('Access added successfully');
         } catch (error) {
@@ -106,16 +106,19 @@ class ProjectController {
             res.status(500).send('Internal server error');
         }
     }
-
     static async removeAccessToProject(req: ProjectRequest, res: Response) {
-        req.project.userWithAccess = req.project.userWithAccess.filter(
-            (userId) => userId.toString() !== req.body.userId
-        );
-
-        await req.project.save();
-        res.status(200).send('Access removed successfully');
+        try {
+            const userId = new Types.ObjectId(req.params.userId); // Convert to ObjectId
+            req.project.userWithAccess = req.project.userWithAccess.filter(
+                (user) => !user.equals(userId)
+            );
+            await req.project.save();
+            res.status(200).send('Access removed successfully');
+        } catch (error) {
+            console.error('Error removing access:', error);
+            res.status(500).send('Internal server error');
+        }
     }
-
     static async deleteProject(req: ProjectRequest, res: Response) {
         req.project.isDeleted = true;
         await req.project.save();

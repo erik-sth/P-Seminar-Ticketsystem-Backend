@@ -4,21 +4,19 @@ import { server } from '../../src/server';
 import { getJWTSecret } from '../../src/utils/jwt';
 import jwt from 'jsonwebtoken';
 import { startDb, stopDB } from '../fakeDb';
+import { Project } from '../../src/models/project';
 
 describe('Project Routes', () => {
     let app: SuperTest<Test>;
     let authToken: string;
+    const userId = new Types.ObjectId().toHexString();
 
     beforeAll(async () => {
         app = supertest(server);
         await startDb(); // Assuming this function initializes your fake database
-        authToken = jwt.sign(
-            { _id: new Types.ObjectId().toHexString() },
-            getJWTSecret(),
-            {
-                expiresIn: '1h',
-            }
-        );
+        authToken = jwt.sign({ _id: userId }, getJWTSecret(), {
+            expiresIn: '1h',
+        });
     });
 
     afterAll(async () => {
@@ -92,5 +90,47 @@ describe('Project Routes', () => {
 
         expect(response.status).toBe(200);
         expect(response.text).toBe('Deleted!');
+    });
+    it('should add access to a project', async () => {
+        const projectData = {
+            name: 'Test Project',
+            date: Date.now(),
+            leader: userId,
+        };
+
+        const project = await Project.create(projectData);
+        const secondUserId = new Types.ObjectId();
+        const response = await app
+            .patch(`/project/addAccess/${project._id}/${secondUserId}`) // Replace with a valid user ID
+            .set('x-auth-token', authToken);
+
+        expect(response.status).toBe(200);
+        expect(response.text).toBe('Access added successfully');
+
+        // Check if the access was added to the project in the database
+        const updatedProject = await Project.findById(project._id);
+        expect(updatedProject.userWithAccess[0]).toEqual(secondUserId);
+    });
+    it('should remove access from a project', async () => {
+        const secondUserId = new Types.ObjectId();
+        const projectData = {
+            name: 'Test Project',
+            date: Date.now(),
+            leader: userId,
+            userWithAccess: [secondUserId],
+        };
+
+        const project = await Project.create(projectData);
+
+        const response = await app
+            .patch(`/project/removeAccess/${project._id}/${secondUserId}`) // Replace with a valid user ID
+            .set('x-auth-token', authToken);
+
+        expect(response.status).toBe(200);
+        expect(response.text).toBe('Access removed successfully');
+
+        // Check if the access was removed from the project in the database
+        const updatedProject = await Project.findById(project._id);
+        expect(updatedProject.userWithAccess[0]).not.toEqual(secondUserId);
     });
 });
