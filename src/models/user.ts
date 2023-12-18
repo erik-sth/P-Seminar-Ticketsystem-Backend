@@ -1,7 +1,8 @@
 import Joi from 'joi';
 import mongoose, { Schema, Model } from 'mongoose';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { AuthRequest, User } from '../types/user.types';
+import { getJWTSecret } from '../utils/jwt';
 
 // User schema
 const userSchema = new Schema<User>(
@@ -46,7 +47,7 @@ userSchema.methods.generateAuthToken = function () {
             isAdmin: this.isAdmin,
         },
 
-        process.env.JWT as Secret,
+        getJWTSecret(),
         { expiresIn: '7d', algorithm: 'HS256' }
     );
     return token;
