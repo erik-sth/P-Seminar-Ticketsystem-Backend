@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'error';
 const logLevelConsole = process.env.NODE_ENV === 'test' ? 'error' : logLevel;
 
 const options: winston.LoggerOptions = {
