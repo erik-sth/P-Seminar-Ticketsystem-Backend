@@ -3,12 +3,14 @@ import { User } from '../models/user';
 import express, { Request, Response } from 'express';
 import Joi from 'joi';
 import { User as UserType } from '../types/user.types';
+import logger from '../utils/logger';
 
 const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        await validateRequest(req);
+        const error = await validateRequest(req);
+        if (error) res.send(error.message).status(400);
 
         req.body.email = req.body.email.toLowerCase();
         const user = await findUserByEmail(req.body.email);
@@ -44,10 +46,7 @@ async function validateRequest(req: Request) {
         email: req.body.email,
         password: req.body.password,
     });
-
-    if (error) {
-        throw new Error(error.message);
-    }
+    return error;
 }
 
 async function findUserByEmail(email: string) {
@@ -61,6 +60,7 @@ async function handlePasswordValidation(password: string, user: UserType) {
         await User.findByIdAndUpdate(user._id, {
             loginAttemptsFailed: user.loginAttemptsFailed + 1,
         });
+        logger.error('password problem');
         throw new Error('Invalid email or password.');
     } else {
         await User.findByIdAndUpdate(user._id, {

@@ -90,4 +90,4 @@ function validateAuth(req: AuthRequest) {
 
     return { error, validateAuth };
 }
-export { UserModel as User, validateSchema, validateAuth };
+export { UserModel as User, validateSchema, validateAuth, userSchema };

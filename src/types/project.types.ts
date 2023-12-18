@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { Types, Document } from 'mongoose';
 
 export interface Project extends Document {
@@ -11,4 +12,8 @@ export interface ProjectQuery {
     userWithAccess: Types.ObjectId;
     isDeleted: boolean;
     _id?: string;
+}
+
+export interface ProjectRequest extends Request {
+    project?: Project;
 }
