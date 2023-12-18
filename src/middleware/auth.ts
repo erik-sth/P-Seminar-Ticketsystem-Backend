@@ -24,7 +24,6 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
             // If the token is expired, return an error response
             return res.status(401).json({ message: 'Token expired' });
         } else {
-            // If the token is invalid for other reasons, return an error response
             return res.status(401).json({ message: 'Unauthorized' });
         }
     }
