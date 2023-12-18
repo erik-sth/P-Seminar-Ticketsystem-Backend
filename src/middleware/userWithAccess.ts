@@ -1,11 +1,10 @@
 import { Response, NextFunction } from 'express';
 import { isValidObjectId } from 'mongoose';
 import { ProjectController } from '../controller/project';
-import { AuthUserWithAccess } from '../types/user.types';
-import { ProjectQuery } from '../types/project.types';
+import { ProjectQuery, ProjectRequest } from '../types/project.types';
 
 async function userWithAccess(
-    req: AuthUserWithAccess,
+    req: ProjectRequest,
     res: Response,
     next: NextFunction
 ) {
@@ -17,11 +16,11 @@ async function userWithAccess(
     //validate
     if (req.params.projectId && isValidObjectId(req.params.projectId)) {
         projectQuery._id = req.params.projectId;
-    }
+    } else res.status(403).send('No access.');
     //get Projects with access
     const result = await ProjectController.getProject(projectQuery);
     if (result) {
-        req.projectsWithAccess = result;
+        req.project = result[0];
         next();
     } else {
         res.status(404).send('Project not found.');
