@@ -1,5 +1,5 @@
-import { Request } from 'express';
 import { Types, Document } from 'mongoose';
+import { AuthenticatedRequest } from './user.types';
 
 export interface Project extends Document {
     name: string;
@@ -14,6 +14,6 @@ export interface ProjectQuery {
     _id?: string;
 }
 
-export interface ProjectRequest extends Request {
+export interface ProjectRequest extends AuthenticatedRequest {
     project?: Project;
 }

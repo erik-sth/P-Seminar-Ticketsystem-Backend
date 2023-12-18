@@ -2,11 +2,11 @@ import _ from 'lodash';
 import bcrypt from 'bcrypt';
 import { User, validateSchema } from '../models/user';
 import { Request, Response } from 'express';
-import { AuthUser } from '../types/user.types';
+import { AuthenticatedRequest } from '../types/user.types';
 import logger from '../utils/logger';
 
 class UserController {
-    async getMe(req: AuthUser, res: Response) {
+    async getMe(req: AuthenticatedRequest, res: Response) {
         const user = await User.findById(req.user._id);
         res.send(user);
     }

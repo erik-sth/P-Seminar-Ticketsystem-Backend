@@ -20,6 +20,6 @@ export interface AuthRequest extends Request {
     password: string;
 }
 
-export interface AuthUser extends Request {
+export interface AuthenticatedRequest extends Request {
     user?: UserTokenData;
 }

@@ -1,10 +1,10 @@
-import { Response, NextFunction, Request } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { getJWTSecret } from '../utils/jwt';
-import { UserTokenData } from '../types/user.types';
+import { AuthenticatedRequest, UserTokenData } from '../types/user.types';
 import logger from '../utils/logger';
 
-const auth = (req: Request, res: Response, next: NextFunction) => {
+const auth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const token = req.headers?.['x-auth-token'] as string;
 
     if (!token) {

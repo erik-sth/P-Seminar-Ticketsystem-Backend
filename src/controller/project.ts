@@ -6,7 +6,7 @@ import {
     ProjectRequest,
 } from '../types/project.types';
 import { Request, Response } from 'express';
-import { AuthUser } from '../types/user.types';
+import { AuthenticatedRequest } from '../types/user.types';
 import logger from '../utils/logger';
 
 class ProjectController {
@@ -35,7 +35,7 @@ class ProjectController {
             res.status(500).send('Internal server error');
         }
     }
-    static async getProjects(req: AuthUser, res: Response) {
+    static async getProjects(req: AuthenticatedRequest, res: Response) {
         const userId = req.user._id;
         const query = {
             $or: [{ leader: userId }, { userWithAccess: userId }],
@@ -66,7 +66,7 @@ class ProjectController {
             res.status(500).send('Internal server error');
         }
     }
-    static async createProject(req: Request, res: Response) {
+    static async createProject(req: AuthenticatedRequest, res: Response) {
         try {
             req.body.userWithAccess = [];
             const error = validateSchema(req.body);
