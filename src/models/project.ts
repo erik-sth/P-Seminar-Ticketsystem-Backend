@@ -23,16 +23,14 @@ function validateSchema(project: Partial<Project>) {
     const schema = Joi.object({
         name: Joi.string().min(3).max(50).required().label('Name'),
         date: Joi.date().required(),
-        userWithAccess: Joi.array()
-            .items(
-                Joi.string().custom((value, helpers) => {
-                    if (!Types.ObjectId.isValid(value)) {
-                        return helpers.error('any.invalid');
-                    }
-                    return value;
-                })
-            )
-            .required(),
+        userWithAccess: Joi.array().items(
+            Joi.string().custom((value, helpers) => {
+                if (!Types.ObjectId.isValid(value)) {
+                    return helpers.error('any.invalid');
+                }
+                return value;
+            })
+        ),
     });
 
     const { error } = schema.validate({
@@ -48,6 +46,6 @@ function validateSchema(project: Partial<Project>) {
         }
     }
 
-    return { error };
+    return error;
 }
 export { ProjectModel as Project, validateSchema };
