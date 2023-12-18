@@ -24,7 +24,7 @@ app.use('/user', user);
 app.use('/auth', auth);
 app.use('/project', project);
 
-const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+const port: number = process.env.PORT ? parseInt(process.env.PORT) : 0;
 const server = app.listen(port, '0.0.0.0', () => {
     logger.info('Server started on port: ' + port);
 });

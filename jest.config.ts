@@ -8,7 +8,6 @@ const config: Config.InitialOptions = {
     transform: {
         '^.+\\.(ts)$': 'ts-jest',
     },
-    maxWorkers: 1, //because of port problems when running in parrallel
 };
 
 export default config;
