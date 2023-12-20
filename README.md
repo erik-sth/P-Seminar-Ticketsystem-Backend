@@ -1,4 +1,4 @@
-# Ticketsystem-Backend
+# Ticketsystem-Backend - not finished(terminated)
 Managing authentication, tickets, and projects seamlessly.
 
 ## Introduction
