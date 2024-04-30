@@ -4,7 +4,6 @@ import base from './routes/base';
 import user from './routes/user';
 import auth from './routes/auth';
 import project from './routes/project';
-import addRateLimiter from './startup/limitRate';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import logger from './utils/logger';
@@ -18,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // startup
 configureCors(app);
-addRateLimiter(app);
 if (process.env.NODE_ENV == 'test') testingConfig();
 else connectToDatabase();
 
